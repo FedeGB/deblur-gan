@@ -5,6 +5,7 @@ from keras.engine import InputSpec
 from keras.engine.topology import Layer
 from keras.layers import Input, Conv2D, Activation, BatchNormalization
 from keras.layers.merge import Add
+import keras.backend as K
 from keras.utils import conv_utils
 from keras.layers.core import Dropout
 
@@ -114,16 +115,16 @@ class ReflectionPadding2D(Layer):
                  data_format=None,
                  **kwargs):
         super(ReflectionPadding2D, self).__init__(**kwargs)
-        self.data_format = conv_utils.normalize_data_format(data_format)
+        self.data_format = K.normalize_data_format(data_format)
         if isinstance(padding, int):
             self.padding = ((padding, padding), (padding, padding))
         elif hasattr(padding, '__len__'):
             if len(padding) != 2:
                 raise ValueError('`padding` should have two elements. '
                                  'Found: ' + str(padding))
-            height_padding = conv_utils.normalize_tuple(padding[0], 2,
+            height_padding = K.normalize_tuple(padding[0], 2,
                                                         '1st entry of padding')
-            width_padding = conv_utils.normalize_tuple(padding[1], 2,
+            width_padding = K.normalize_tuple(padding[1], 2,
                                                        '2nd entry of padding')
             self.padding = (height_padding, width_padding)
         else:
